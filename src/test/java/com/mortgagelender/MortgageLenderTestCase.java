@@ -10,38 +10,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MortgageLenderTestCase {
 
 
-
     @Test
     @DisplayName("As a lender, I want to be able to check my available funds, so that I know how much money I can offer for loans.")
-
-    void checkAvailableFunds(){
+    void checkAvailableFunds() {
 
         MortgageLender mortgagelender = new MortgageLender();
 
-        assertEquals(75000,mortgagelender.getFunds());
+        assertEquals(75000, mortgagelender.getFunds());
 
     }
 
     @Test
     @DisplayName("As a lender, I want to add money to my available funds, so that I can offer loans to potential home buyers.")
-
-    void checkLenderAddDepositAmount(){
+    void checkLenderAddDepositAmount() {
         MortgageLender mortgagelender = new MortgageLender();
 
         mortgagelender.setDeposit(5000);
 
         double actualValue = mortgagelender.fundsTotal(mortgagelender.getDeposit());
 
-        assertEquals(80000,actualValue);
+        assertEquals(80000, actualValue);
 
 
     }
 
     @Test
     @DisplayName("Qualify for full amount")
-    void validateIfCandidateQualifiesForFullAmount(){
+    void validateIfCandidateQualifiesForFullAmount() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(5000, 621 , 89999, 36 );
+        Candidate candidate = new Candidate(5000, 621, 89999, 36);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
 
         assertEquals(true, qualifySavings);
@@ -55,10 +52,9 @@ public class MortgageLenderTestCase {
         String actualStatusMessage = mortgagelender.qualifiesCandidate(candidate);
         String actualQualified = mortgagelender.getQualification();
         String actualStatus = mortgagelender.getStatus();
-        assertAll( () ->  assertEquals ("qualified", actualStatusMessage) ,
-                () -> assertEquals( "qualified", actualQualified) ,
-                () -> assertEquals( "qualified",actualStatus ));
-
+        assertAll(() -> assertEquals("qualified", actualStatusMessage),
+                () -> assertEquals("qualified", actualQualified),
+                () -> assertEquals("qualified", actualStatus));
 
 
         //asssertThrows
@@ -67,9 +63,9 @@ public class MortgageLenderTestCase {
 
     @Test
     @DisplayName("Partial qualified amount")
-    void testPartialQualifiedAmountForCandidate(){
+    void testPartialQualifiedAmountForCandidate() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(5000, 621 , 100, 36 );
+        Candidate candidate = new Candidate(5000, 621, 100, 36);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         assertEquals(false, qualifySavings);
 
@@ -82,18 +78,18 @@ public class MortgageLenderTestCase {
         String actualStatusMessage = mortgagelender.isPartiallyQualified(candidate);
         String actualQualified = mortgagelender.getQualification();
         String actualStatus = mortgagelender.getStatus();
-        assertAll( () ->  assertEquals ("qualified", actualStatusMessage) ,
-                () -> assertEquals( "partially qualified", actualQualified) ,
-                () -> assertEquals( "qualified",actualStatus ));
+        assertAll(() -> assertEquals("qualified", actualStatusMessage),
+                () -> assertEquals("partially qualified", actualQualified),
+                () -> assertEquals("qualified", actualStatus));
 
 
     }
 
     @Test
     @DisplayName("Displaying not qualified")
-    void testCandidateIsNotQualified(){
+    void testCandidateIsNotQualified() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(5000, 700 , 1000, 37 );
+        Candidate candidate = new Candidate(5000, 700, 1000, 37);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         assertEquals(false, qualifySavings);
 
@@ -106,19 +102,19 @@ public class MortgageLenderTestCase {
         String actualStatusMessage = mortgagelender.isPartiallyQualified(candidate);
         String actualQualified = mortgagelender.getQualification();
         String actualStatus = mortgagelender.getStatus();
-        assertAll( () ->  assertEquals ("denied", actualStatusMessage) ,
-                () -> assertEquals( "not qualified", actualQualified) ,
-                () -> assertEquals( "denied",actualStatus ));
+        assertAll(() -> assertEquals("denied", actualStatusMessage),
+                () -> assertEquals("not qualified", actualQualified),
+                () -> assertEquals("denied", actualStatus));
 
 
     }
 
     @Test
     @DisplayName(" Loan For NOT Proceed")
-    void checkNotProceedLoan(){
+    void checkNotProceedLoan() {
 
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(80000, 621 , 89999, 38 );
+        Candidate candidate = new Candidate(80000, 621, 89999, 38);
         mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         mortgagelender.qualifiesCandidate(candidate);
         Exception ex = assertThrows(Exception.class, () -> mortgagelender.processLoan(candidate));
@@ -127,45 +123,45 @@ public class MortgageLenderTestCase {
 
     @Test
     @DisplayName(" Qualified for Approved Loan")
-    void checkQualifiedLoanApprovedStatus(){
+    MortgageLender checkQualifiedLoanApprovedStatus() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(5000, 621 , 89999, 35 );
+        Candidate candidate = new Candidate(5000, 621, 89999, 35);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         mortgagelender.qualifiesCandidate(candidate);
         try {
             String processStatus = mortgagelender.processLoan(candidate);
 
-            assertEquals("approved",processStatus);
-        }catch(Exception e) {
+            assertEquals("approved", processStatus);
+        } catch (Exception e) {
             e.getMessage();
 
         }
-
+        return mortgagelender;
     }
 
     @Test
     @DisplayName("onHold Loan")
-    void checkOnHoldLoan(){
+    MortgageLender checkOnHoldLoan() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(75001, 621 , 89999, 35 );
+        Candidate candidate = new Candidate(75001, 621, 89999, 35);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         mortgagelender.qualifiesCandidate(candidate);
         try {
             String processStatus = mortgagelender.processLoan(candidate);
 
-            assertEquals("on hold",processStatus);
-        }catch(Exception e) {
+            assertEquals("on hold", processStatus);
+        } catch (Exception e) {
             e.getMessage();
 
         }
-
+        return mortgagelender;
     }
 
     @Test
     @DisplayName("Move available funds to pending funds status")
-    void checkAvailableFundsMovingToPendingStatus(){
+    void checkAvailableFundsMovingToPendingStatus() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(10000, 621 , 89999, 35 );
+        Candidate candidate = new Candidate(10000, 621, 89999, 35);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         mortgagelender.qualifiesCandidate(candidate);
         try {
@@ -176,7 +172,7 @@ public class MortgageLenderTestCase {
             double actualPendingFunds = mortgagelender.getPendingFunds();
             assertEquals(10000, actualPendingFunds);
 
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.getMessage();
 
         }
@@ -184,40 +180,39 @@ public class MortgageLenderTestCase {
 
     @Test
     @DisplayName("Loan process accepted by Applicant  ")
-    void checkLoanProcessIsAcceptedByApplicant(){
+    void checkLoanProcessIsAcceptedByApplicant() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(10000, 621 , 89999, 35 , true);
+        Candidate candidate = new Candidate(10000, 621, 89999, 35, true);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         mortgagelender.qualifiesCandidate(candidate);
         try {
             mortgagelender.processLoan(candidate);
             mortgagelender.loanStatus(candidate.isAcceptStatus());
 
-            assertEquals("accepted", mortgagelender.getStatus() );
-            assertEquals( -10000, mortgagelender.getPendingFunds());
-        }
-        catch(Exception e) {
+            assertEquals("accepted", mortgagelender.getStatus());
+            assertEquals(-10000, mortgagelender.getPendingFunds());
+        } catch (Exception e) {
             e.getMessage();
         }
     }
 
     @Test
     @DisplayName("Loan process rejected by Applicant  ")
-    void checkLoanProcessIsRejectedByApplicant(){
+    MortgageLender checkLoanProcessIsRejectedByApplicant() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(10000, 621 , 89999, 35 , false);
+        Candidate candidate = new Candidate(10000, 621, 89999, 35, false);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         mortgagelender.qualifiesCandidate(candidate);
         try {
             mortgagelender.processLoan(candidate);
             mortgagelender.loanStatus(candidate.isAcceptStatus());
 
-            assertEquals("rejected", mortgagelender.getStatus() );
+            assertEquals("rejected", mortgagelender.getStatus());
 
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.getMessage();
         }
+        return mortgagelender;
     }
 
     @Test
@@ -237,5 +232,6 @@ public class MortgageLenderTestCase {
             e.getMessage();
         }
     }
+
 
 }
