@@ -18,4 +18,18 @@ public class MortgageLenderTestCase {
 
     }
 
+    @Test
+    @DisplayName("As a lender, I want to add money to my available funds, so that I can offer loans to potential home buyers.")
+
+    void checkLenderAddDepositAmount(){
+        MortgageLender mortgagelender = new MortgageLender();
+
+        mortgagelender.setDeposit(5000);
+
+        double actualValue = mortgagelender.fundsTotal(mortgagelender.getDeposit());
+
+        assertEquals(80000,actualValue);
+
+
+    }
 }
