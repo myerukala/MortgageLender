@@ -11,12 +11,23 @@ public class Candidate {
 
     private  int dti;
 
+    private boolean acceptStatus;
+
 
     public Candidate(double requestedAmount, int score, double savings, int  dti){
         this.requestedAmount = requestedAmount;
         this.score = score;
         this.savings = savings;
         this.dti = dti;
+    }
+
+    public Candidate(double requestedAmount, int score, double savings, int  dti, boolean acceptStatus){
+        this.requestedAmount = requestedAmount;
+        this.score = score;
+        this.savings = savings;
+        this.dti = dti;
+        this.acceptStatus = acceptStatus;
+
     }
 
     public double getSavings() {
@@ -55,5 +66,12 @@ public class Candidate {
         this.score = score;
     }
 
+    public boolean isAcceptStatus() {
+        return acceptStatus;
+    }
+
+    public void setAcceptStatus(boolean acceptStatus) {
+        this.acceptStatus = acceptStatus;
+    }
 
 }

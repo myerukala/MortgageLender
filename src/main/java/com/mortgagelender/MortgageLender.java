@@ -9,6 +9,15 @@ public class MortgageLender {
     private String status;
     private double pendingFunds;
 
+    private int dateLoans;
+
+    public int getDateLoans() {
+        return dateLoans;
+    }
+
+    public void setDateLoans(int dateLoans) {
+        this.dateLoans = dateLoans;
+    }
     public double getPendingFunds() {
         return pendingFunds;
     }
@@ -143,4 +152,26 @@ public class MortgageLender {
         }
 
     }
+
+    public void loanStatus( boolean acceptOfferStatus){
+        if ( acceptOfferStatus ){
+            status = "accepted";
+            pendingFunds -= loanAmount;
+
+        }else {
+            status = "rejected";
+            funds += loanAmount;
+            loanAmount = 0;
+        }
+
+    }
+
+    public void checkExpiredLoans(){
+        if ( dateLoans >= 3 ){
+            funds += loanAmount;
+            status = "expired";
+        }
+
+    }
+
 }

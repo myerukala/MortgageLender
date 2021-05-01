@@ -182,5 +182,60 @@ public class MortgageLenderTestCase {
         }
     }
 
+    @Test
+    @DisplayName("Loan process accepted by Applicant  ")
+    void checkLoanProcessIsAcceptedByApplicant(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(10000, 621 , 89999, 35 , true);
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        mortgagelender.qualifiesCandidate(candidate);
+        try {
+            mortgagelender.processLoan(candidate);
+            mortgagelender.loanStatus(candidate.isAcceptStatus());
+
+            assertEquals("accepted", mortgagelender.getStatus() );
+            assertEquals( -10000, mortgagelender.getPendingFunds());
+        }
+        catch(Exception e) {
+            e.getMessage();
+        }
+    }
+
+    @Test
+    @DisplayName("Loan process rejected by Applicant  ")
+    void checkLoanProcessIsRejectedByApplicant(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(10000, 621 , 89999, 35 , false);
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        mortgagelender.qualifiesCandidate(candidate);
+        try {
+            mortgagelender.processLoan(candidate);
+            mortgagelender.loanStatus(candidate.isAcceptStatus());
+
+            assertEquals("rejected", mortgagelender.getStatus() );
+
+        }
+        catch(Exception e) {
+            e.getMessage();
+        }
+    }
+
+    @Test
+    @DisplayName("Checking dated loans")
+    void checkDatedLoans() {
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(10000, 621, 89999, 35, true);
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        mortgagelender.qualifiesCandidate(candidate);
+        mortgagelender.setDateLoans(3);
+        try {
+            mortgagelender.processLoan(candidate);
+            mortgagelender.loanStatus(candidate.isAcceptStatus());
+            mortgagelender.checkExpiredLoans();
+            assertEquals("expired", mortgagelender.getStatus());
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
 
 }
