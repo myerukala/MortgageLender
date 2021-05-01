@@ -3,7 +3,7 @@ package com.mortgagelender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MortgageLenderTestCase {
 
@@ -32,4 +32,34 @@ public class MortgageLenderTestCase {
 
 
     }
+
+    @Test
+    @DisplayName("Qualify for full amount")
+    void validateIfCandidateQualifiesForFullAmount(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(5000, 621 , 89999, 36 );
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+
+        assertEquals(true, qualifySavings);
+
+        boolean qualifyDti = mortgagelender.calculateDti(candidate.getDti());
+        assertEquals(true, qualifyDti);
+
+        boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
+        assertEquals(true, creditScore);
+
+        String actualStatusMessage = mortgagelender.qualifiesCandidate(candidate);
+        String actualQualified = mortgagelender.getQualification();
+        String actualStatus = mortgagelender.getStatus();
+        assertAll( () ->  assertEquals ("qualified", actualStatusMessage) ,
+                () -> assertEquals( "qualified", actualQualified) ,
+                () -> assertEquals( "qualified",actualStatus ));
+
+
+
+        //asssertThrows
+
+    }
+
+
 }
