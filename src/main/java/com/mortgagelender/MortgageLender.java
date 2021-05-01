@@ -115,4 +115,16 @@ public class MortgageLender {
         }
         return status;
     }
+
+    public String processLoan(Candidate candidate) throws Exception{
+
+        if(getFunds() > getLoanAmount() && getQualification().equals("qualified")){
+            status = "approved";
+        }else if(getQualification().equals("not qualified")){
+            throw new Exception ("not Proceed");
+        }else
+            status = "on hold";
+
+        return status;
+    }
 }
