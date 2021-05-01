@@ -224,13 +224,13 @@ public class MortgageLenderTestCase {
     @DisplayName("Checking dated loans")
     void checkDatedLoans() {
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(10000, 621, 89999, 35, true);
+        Candidate candidate = new Candidate(10000, 621, 89999, 35);
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
         mortgagelender.qualifiesCandidate(candidate);
         mortgagelender.setDateLoans(3);
         try {
             mortgagelender.processLoan(candidate);
-            mortgagelender.loanStatus(candidate.isAcceptStatus());
+
             mortgagelender.checkExpiredLoans();
             assertEquals("expired", mortgagelender.getStatus());
         } catch (Exception e) {
