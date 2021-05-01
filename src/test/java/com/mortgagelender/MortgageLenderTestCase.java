@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MortgageLenderTestCase {
 
@@ -158,6 +159,27 @@ public class MortgageLenderTestCase {
 
         }
 
+    }
+
+    @Test
+    @DisplayName("Move available funds to pending funds status")
+    void checkAvailableFundsMovingToPendingStatus(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(10000, 621 , 89999, 35 );
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        mortgagelender.qualifiesCandidate(candidate);
+        try {
+            mortgagelender.processLoan(candidate);
+            mortgagelender.moveApprovedFundToPendingFund(candidate);
+            double actualFunds = mortgagelender.getFunds();
+            assertEquals(65000, actualFunds);
+            double actualPendingFunds = mortgagelender.getPendingFunds();
+            assertEquals(10000, actualPendingFunds);
+
+        }catch(Exception e) {
+            e.getMessage();
+
+        }
     }
 
 

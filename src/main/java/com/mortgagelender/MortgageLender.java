@@ -7,6 +7,16 @@ public class MortgageLender {
     private String qualification;
     private double loanAmount;
     private String status;
+    private double pendingFunds;
+
+    public double getPendingFunds() {
+        return pendingFunds;
+    }
+
+    public void setPendingFunds(double pendingFunds) {
+        this.pendingFunds = pendingFunds;
+    }
+
 
     public String getStatus() {
         return status;
@@ -124,5 +134,13 @@ public class MortgageLender {
             status = "on hold";
         }
         return status;
+    }
+
+    public void moveApprovedFundToPendingFund(Candidate candidate){
+        if ( status.equals("approved")){
+            pendingFunds = loanAmount;
+            funds -= loanAmount;
+        }
+
     }
 }
