@@ -61,5 +61,29 @@ public class MortgageLenderTestCase {
 
     }
 
+    @Test
+    @DisplayName("Partial qualified amount")
+    void testPartialQualifiedAmountForCandidate(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(5000, 621 , 100, 36 );
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        assertEquals(false, qualifySavings);
+
+        boolean qualifyDti = mortgagelender.calculateDti(candidate.getDti());
+        assertEquals(true, qualifyDti);
+
+        boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
+        assertEquals(true, creditScore);
+
+        String actualStatusMessage = mortgagelender.isPartiallyQualified(candidate);
+        String actualQualified = mortgagelender.getQualification();
+        String actualStatus = mortgagelender.getStatus();
+        assertAll( () ->  assertEquals ("qualified", actualStatusMessage) ,
+                () -> assertEquals( "partially qualified", actualQualified) ,
+                () -> assertEquals( "qualified",actualStatus ));
+
+
+    }
+
 
 }

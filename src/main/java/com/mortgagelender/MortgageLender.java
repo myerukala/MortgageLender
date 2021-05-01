@@ -61,7 +61,7 @@ public class MortgageLender {
         double minimumAmount = (requestedAmount * .25);
         if (savings < minimumAmount) {
             return false;
-        }else {
+        }else{
             return true;
         }
     }
@@ -98,4 +98,21 @@ public class MortgageLender {
         return status;
     }
 
+    public String isPartiallyQualified(Candidate candidate){
+
+        boolean savingsStatus = calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+
+        if ( checkCreditScore(candidate.getScore()) &&
+                calculateDti(candidate.getDti()) && ! savingsStatus
+                ){
+
+            loanAmount = candidate.getSavings() * 4;
+            status = "qualified";
+            qualification = "partially qualified";
+        }else{
+            status = "denied";
+            qualification = "not qualified";
+        }
+        return status;
+    }
 }
