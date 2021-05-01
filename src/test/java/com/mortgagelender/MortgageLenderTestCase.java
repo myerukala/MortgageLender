@@ -73,7 +73,8 @@ public class MortgageLenderTestCase {
         assertEquals(true, qualifyDti);
 
         boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
-        assertEquals(true, creditScore);
+
+         assertEquals(true, creditScore);
 
         String actualStatusMessage = mortgagelender.isPartiallyQualified(candidate);
         String actualQualified = mortgagelender.getQualification();
