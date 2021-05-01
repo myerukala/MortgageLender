@@ -4,7 +4,8 @@ public class MortgageLender {
 
     private double funds = 75000;
     private double deposit;
-
+    private String qualification;
+    private double loanAmount;
     private String status;
 
     public String getStatus() {
@@ -30,10 +31,6 @@ public class MortgageLender {
     public void setLoanAmount(double loanAmount) {
         this.loanAmount = loanAmount;
     }
-
-    private String qualification;
-
-    private double loanAmount;
 
     public double getDeposit() {
         return deposit;
@@ -89,6 +86,7 @@ public class MortgageLender {
                 calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount()) ){
             //String.format("qualified");
             loanAmount = candidate.getRequestedAmount();
+
             status = "qualified";
             qualification = "qualified";
         }else{
@@ -118,13 +116,13 @@ public class MortgageLender {
 
     public String processLoan(Candidate candidate) throws Exception{
 
-        if(getFunds() > getLoanAmount() && getQualification().equals("qualified")){
+        if( ( getFunds() > getLoanAmount() ) && getQualification().equals("qualified")){
             status = "approved";
         }else if(getQualification().equals("not qualified")){
             throw new Exception ("not Proceed");
-        }else
+        }else {
             status = "on hold";
-
+        }
         return status;
     }
 }

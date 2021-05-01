@@ -1,11 +1,14 @@
 package com.mortgagelender;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MortgageLenderTestCase {
+
+
 
     @Test
     @DisplayName("As a lender, I want to be able to check my available funds, so that I know how much money I can offer for loans.")
@@ -112,19 +115,13 @@ public class MortgageLenderTestCase {
     @Test
     @DisplayName(" Loan For NOT Proceed")
     void checkNotProceedLoan(){
+
         MortgageLender mortgagelender = new MortgageLender();
-        Candidate candidate = new Candidate(5000, 621 , 89999, 38 );
-        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
-
-        assertEquals(true, qualifySavings);
-
-        boolean qualifyDti = mortgagelender.calculateDti(candidate.getDti());
-        assertEquals(false, qualifyDti);
-
-        boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
-        assertEquals(true, creditScore);
-
-        assertThrows(Exception.class, () -> mortgagelender.processLoan(candidate));
+        Candidate candidate = new Candidate(80000, 621 , 89999, 38 );
+        mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        mortgagelender.qualifiesCandidate(candidate);
+        Exception ex = assertThrows(Exception.class, () -> mortgagelender.processLoan(candidate));
+        assertEquals("not Proceed", ex.getMessage());
     }
 
     @Test
@@ -133,15 +130,7 @@ public class MortgageLenderTestCase {
         MortgageLender mortgagelender = new MortgageLender();
         Candidate candidate = new Candidate(5000, 621 , 89999, 35 );
         boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
-
-        assertEquals(true, qualifySavings);
-
-        boolean qualifyDti = mortgagelender.calculateDti(candidate.getDti());
-        assertEquals(true, qualifyDti);
-
-        boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
-        assertEquals(true, creditScore);
-
+        mortgagelender.qualifiesCandidate(candidate);
         try {
             String processStatus = mortgagelender.processLoan(candidate);
 
@@ -152,4 +141,24 @@ public class MortgageLenderTestCase {
         }
 
     }
+
+    @Test
+    @DisplayName("onHold Loan")
+    void checkOnHoldLoan(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(75001, 621 , 89999, 35 );
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        mortgagelender.qualifiesCandidate(candidate);
+        try {
+            String processStatus = mortgagelender.processLoan(candidate);
+
+            assertEquals("on hold",processStatus);
+        }catch(Exception e) {
+            e.getMessage();
+
+        }
+
+    }
+
+
 }
