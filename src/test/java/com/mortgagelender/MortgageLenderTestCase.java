@@ -85,5 +85,29 @@ public class MortgageLenderTestCase {
 
     }
 
+    @Test
+    @DisplayName("Displaying not qualified")
+    void testCandidateIsNotQualified(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(5000, 700 , 1000, 37 );
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+        assertEquals(false, qualifySavings);
+
+        boolean qualifyDti = mortgagelender.calculateDti(candidate.getDti());
+        assertEquals(false, qualifyDti);
+
+        boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
+        assertEquals(true, creditScore);
+
+        String actualStatusMessage = mortgagelender.isPartiallyQualified(candidate);
+        String actualQualified = mortgagelender.getQualification();
+        String actualStatus = mortgagelender.getStatus();
+        assertAll( () ->  assertEquals ("denied", actualStatusMessage) ,
+                () -> assertEquals( "not qualified", actualQualified) ,
+                () -> assertEquals( "denied",actualStatus ));
+
+
+    }
+
 
 }
