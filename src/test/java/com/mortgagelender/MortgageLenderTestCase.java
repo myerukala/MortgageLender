@@ -85,5 +85,51 @@ public class MortgageLenderTestCase {
 
     }
 
+    @Test
+    @DisplayName(" Loan For NOT Proceed")
+    void checkNotProceedLoan(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(5000, 621 , 89999, 38 );
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+
+        assertEquals(true, qualifySavings);
+
+        boolean qualifyDti = mortgagelender.calculateDti(candidate.getDti());
+        assertEquals(false, qualifyDti);
+
+        boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
+        assertEquals(true, creditScore);
+
+        assertThrows(Exception.class, () -> mortgagelender.processLoan(candidate));
+    }
+
+    @Test
+    @DisplayName(" Qualified for Approved Loan")
+    void checkQualifiedLoanApprovedStatus(){
+        MortgageLender mortgagelender = new MortgageLender();
+        Candidate candidate = new Candidate(5000, 621 , 89999, 35 );
+        boolean qualifySavings = mortgagelender.calculateSavingsPercentage(candidate.getSavings(), candidate.getRequestedAmount());
+
+        assertEquals(true, qualifySavings);
+
+        boolean qualifyDti = mortgagelender.calculateDti(candidate.getDti());
+        assertEquals(true, qualifyDti);
+
+        boolean creditScore = mortgagelender.checkCreditScore(candidate.getScore());
+        assertEquals(true, creditScore);
+
+        try {
+            String processStatus = mortgagelender.processLoan(candidate);
+
+            assertEquals("approved",processStatus);
+        }catch(Exception e) {
+            e.getMessage();
+
+        }
+
+    }
+
+
+
 
 }
